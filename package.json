@@ -1,8 +1,12 @@
 {
-  "name": "sola",
+  "name": "sola-mcp-gateway",
   "version": "0.1.0",
   "description": "MCP gateway for allowlisted catalog tools.",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zukilover/sola.git"
+  },
   "type": "commonjs",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",

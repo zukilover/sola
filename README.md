@@ -9,7 +9,7 @@ You install registries of the backend operations the gateway may call. Sola chec
 Node.js 20+. Peer dependency: `zod`.
 
 ```bash
-npm install sola zod
+npm install sola-mcp-gateway zod
 ```
 
 Dependencies: `@modelcontextprotocol/sdk`, `express`.
@@ -25,7 +25,7 @@ import {
   compileServer,
   success,
   type CatalogTool,
-} from 'sola';
+} from 'sola-mcp-gateway';
 
 const ping: CatalogTool = {
   name: 'ping',
@@ -72,7 +72,7 @@ import {
   findCatalog,
   useRegistries,
   writeScopeNames,
-} from 'sola';
+} from 'sola-mcp-gateway';
 
 useRegistries([{
   id: 'demo',

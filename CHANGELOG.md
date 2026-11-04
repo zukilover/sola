@@ -23,6 +23,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- npm package name is `sola-mcp-gateway`.
 - Registry client id `luna-host` is now `host`.
 - `useHostIdentity` / `hostIdentity` replace `useGatewayIdentity` /
   `gatewayIdentity`.
