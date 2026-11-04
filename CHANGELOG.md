@@ -7,12 +7,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-### Changed
-
-- Registry client id `luna-host` is now `host`.
-- `useHostIdentity` / `hostIdentity` replace `useGatewayIdentity` /
-  `gatewayIdentity`.
-
 ## [0.1.0] - 2026-11-04
 
 ### Added
@@ -26,3 +20,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Registry plugin host (`useRegistries`) so product backends stay outside
   this package.
 - RFC 2119 specification under `spec/`.
+
+### Changed
+
+- Registry client id `luna-host` is now `host`.
+- `useHostIdentity` / `hostIdentity` replace `useGatewayIdentity` /
+  `gatewayIdentity`.

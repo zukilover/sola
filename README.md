@@ -1,8 +1,8 @@
 # Sola
 
-Sola is a catalog runtime for [MCP](https://modelcontextprotocol.io/). You define the backend operations a model may call; Sola serves them from one Streamable HTTP endpoint.
+Sola is an [MCP](https://modelcontextprotocol.io/) gateway. A client connects to one Streamable HTTP endpoint. The model sees four tools: `discover_servers`, `discover_tools`, `get_tool_schema`, and `invoke_tool`.
 
-Clients get four tools: `discover_servers`, `discover_tools`, `get_tool_schema`, and `invoke_tool`. Product operations live in registries you install.
+You install registries of the backend operations the gateway may call. Sola checks the allowlist, then runs the matching catalog tool through `invoke_tool`.
 
 ## Install
 
@@ -100,11 +100,11 @@ attachSola(app, {
 });
 ```
 
-`attachSola` mounts `/mcp` and the OAuth 2.1 / PKCE routes. Pass a `SolaSessionRuntime` and a `SolaOAuthRuntime`.
+`attachSola` is the gateway. It mounts `/mcp` and the OAuth 2.1 / PKCE routes. Pass a `SolaSessionRuntime` and a `SolaOAuthRuntime`.
 
 `transport: { sse: false }` is for request/response hosts. Clients POST to `/mcp`.
 
-A client signs in, then calls `discover_servers`, `discover_tools`, and `invoke_tool`.
+A client signs in, then calls `discover_servers`, `discover_tools`, and `invoke_tool`. Those calls stay on the gateway. `invoke_tool` runs the matching catalog tool.
 
 ## Spec
 
@@ -121,19 +121,11 @@ Catalogs are TypeScript (`CatalogTool`). Full spec: [`spec/`](./spec).
 
 ## Versioning
 
-Sola uses [Semantic Versioning](https://semver.org/). Releases are listed in [CHANGELOG.md](./CHANGELOG.md).
+[CHANGELOG.md](./CHANGELOG.md)
 
 ## Contributing
 
-See [CONTRIBUTING.md](./CONTRIBUTING.md).
-
-```bash
-npm ci
-npm run typecheck
-npm test
-```
-
-`npm ci` compiles `src/` to `dist/` via `prepare`. CI runs those checks on push and pull request. A GitHub Release for tag `vX.Y.Z` publishes that version to npm.
+[CONTRIBUTING.md](./CONTRIBUTING.md)
 
 ## License
 
