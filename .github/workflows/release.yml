@@ -10,11 +10,13 @@ concurrency:
 
 permissions:
   contents: write
+  id-token: write
 
 jobs:
   release:
     if: github.repository == 'zukilover/sola' && !startsWith(github.event.head_commit.message, 'Release ')
     runs-on: ubuntu-latest
+    environment: release
     steps:
       - uses: actions/checkout@v4
         with:
@@ -23,6 +25,7 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 22
+          registry-url: https://registry.npmjs.org
 
       - id: cut
         env:
@@ -43,3 +46,15 @@ jobs:
           git push origin HEAD:main
           git push origin "v${VERSION}"
           gh release create "v${VERSION}" --title "v${VERSION}" --notes-file "$RELEASE_NOTES_PATH"
+
+      - name: Publish to npm
+        run: |
+          npm install -g npm@^11.5.1
+          npm ci
+          NAME="$(node -p "require('./package.json').name")"
+          VER="$(node -p "require('./package.json').version")"
+          if npm view "$NAME@$VER" version >/dev/null 2>&1; then
+            echo "$NAME@$VER is already on npm"
+            exit 0
+          fi
+          npm publish --provenance --access public
