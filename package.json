@@ -1,6 +1,6 @@
 {
   "name": "sola-mcp-gateway",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "MCP gateway for allowlisted catalog tools.",
   "license": "MIT",
   "repository": {
