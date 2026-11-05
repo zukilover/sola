@@ -40,12 +40,7 @@ Use RFC 2119 language in spec documents: MUST, MUST NOT, SHOULD, MAY.
 
 This package follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html). The changelog follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
-To cut a release:
-
-1. Move `[Unreleased]` notes in `CHANGELOG.md` under `[x.y.z] - YYYY-MM-DD`
-2. Set `"version"` in `package.json` to `x.y.z`
-3. Tag `vX.Y.Z` and publish a GitHub Release
-4. CI publishes that tag to npm
+A merge to `main` publishes the next patch release. Put notes under `## [Unreleased]` in [CHANGELOG.md](./CHANGELOG.md). The release workflow moves those notes, bumps the patch version, tags `vX.Y.Z`, and opens the GitHub Release. That release publishes the package to npm.
 
 ## Catalog language
 

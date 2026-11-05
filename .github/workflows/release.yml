@@ -1,0 +1,45 @@
+name: Release
+
+on:
+  push:
+    branches: [main]
+
+concurrency:
+  group: release-main
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    if: github.repository == 'zukilover/sola' && !startsWith(github.event.head_commit.message, 'Release ')
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - id: cut
+        env:
+          RELEASE_NOTES_PATH: ${{ runner.temp }}/release-notes.md
+        run: node scripts/prepare-release.mjs
+
+      - name: Tag and publish the GitHub Release
+        env:
+          VERSION: ${{ steps.cut.outputs.version }}
+          GH_TOKEN: ${{ github.token }}
+          RELEASE_NOTES_PATH: ${{ runner.temp }}/release-notes.md
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add package.json package-lock.json CHANGELOG.md
+          git commit -m "Release ${VERSION}"
+          git tag "v${VERSION}"
+          git push origin HEAD:main
+          git push origin "v${VERSION}"
+          gh release create "v${VERSION}" --title "v${VERSION}" --notes-file "$RELEASE_NOTES_PATH"
