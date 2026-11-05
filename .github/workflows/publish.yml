@@ -3,9 +3,13 @@ name: Publish
 on:
   release:
     types: [published]
+  workflow_run:
+    workflows: [Release]
+    types: [completed]
 
 jobs:
   publish:
+    if: github.event_name == 'release' || github.event.workflow_run.conclusion == 'success'
     runs-on: ubuntu-latest
     environment: release
     permissions:
@@ -13,18 +17,33 @@ jobs:
       id-token: write
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          ref: ${{ github.event.release.tag_name || github.event.workflow_run.head_sha }}
+
+      - name: Checkout the release tag
+        if: github.event_name == 'workflow_run'
+        run: |
+          git fetch --tags --force
+          git checkout "$(git describe --tags --abbrev=0 --match 'v[0-9]*')"
+
       - uses: actions/setup-node@v4
         with:
           node-version: 22
           cache: npm
           registry-url: https://registry.npmjs.org
+
       - run: npm install -g npm@^11.5.1
       - run: npm ci
+
       - name: Match git tag to package.json
         run: |
-          TAG="${GITHUB_REF_NAME#v}"
+          git fetch --tags --force
+          TAG="$(git describe --tags --exact-match HEAD)"
+          TAG="${TAG#v}"
           PKG="$(node -p "require('./package.json').version")"
           test "$TAG" = "$PKG"
+
       - name: Publish to npm
         run: |
           NAME="$(node -p "require('./package.json').name")"
